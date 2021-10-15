@@ -1,4 +1,4 @@
-package com.rubypaper;
+package com.rubypaper.domain;
 
 import java.util.Date;
 
