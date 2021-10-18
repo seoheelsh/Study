@@ -10,8 +10,11 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
+import java.text.MessageFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -560,7 +563,13 @@ public class JavaEclipsePOS {
 		JButton jbtnPay = new JButton("Pay");
 		jbtnPay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if (jcboPayment.getSelectedItem().equals("Cash")) {
+					Change();
+				}
+				else {
+					jtxtChange.setText("");
+					jtxtDisplay.setText("");
+				}
 			}
 		});
 		jbtnPay.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -568,6 +577,19 @@ public class JavaEclipsePOS {
 		panel_3_1.add(jbtnPay);
 		
 		JButton jbtnPrint = new JButton("Print");
+		jbtnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MessageFormat header = new MessageFormat("Printing in progress");
+				MessageFormat footer = new MessageFormat("Page (0, number, integer)");
+				
+				try {
+					table.print(JTable.PrintMode.NORMAL,header,footer);
+				}
+				catch (PrinterException ex) {
+					System.err.format("No Printer found", ex.getMessage());
+				}
+			}
+		});
 		jbtnPrint.setFont(new Font("Tahoma", Font.BOLD, 24));
 		jbtnPrint.setBounds(149, 10, 125, 50);
 		panel_3_1.add(jbtnPrint);
@@ -591,11 +613,40 @@ public class JavaEclipsePOS {
 		panel_3_1.add(jbtnReset);
 		
 		JButton jbtnRemove = new JButton("Remove Item");
+		jbtnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				
+				int RemoveItem = table.getSelectedRow();
+				if (RemoveItem >= 0) {
+					model.removeRow(RemoveItem);
+				}
+				
+				ItemCost();
+				
+				if (jcboPayment.getSelectedItem().equals("Cash")) {
+					Change();
+				}
+				else {
+					jtxtChange.setText("");
+					jtxtDisplay.setText("");
+				}
+			}
+		});
 		jbtnRemove.setFont(new Font("Tahoma", Font.BOLD, 20));
 		jbtnRemove.setBounds(12, 70, 190, 50);
 		panel_3_1.add(jbtnRemove);
 		
 		JButton jbtnExit = new JButton("Exit");
+		jbtnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame = new JFrame("Exit");
+				
+				if (JOptionPane.showConfirmDialog(frame, "Confirm if you want to exit", "Point of Sale", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
+					System.exit(0);
+				}
+			}
+		});
 		jbtnExit.setFont(new Font("Tahoma", Font.BOLD, 24));
 		jbtnExit.setBounds(221, 70, 190, 50);
 		panel_3_1.add(jbtnExit);
@@ -633,8 +684,8 @@ public class JavaEclipsePOS {
 		lblNewLabel_1_1_1_1.setBounds(12, 10, 160, 30);
 		panel_3_1_1.add(lblNewLabel_1_1_1_1);
 		
-		JComboBox jcboPayment = new JComboBox();
-		jcboPayment.setModel(new DefaultComboBoxModel(new String[] {"", "Cash", "Visa Card", "Master Card"}));
+		JComboBox<String> jcboPayment = new JComboBox<>();
+		jcboPayment.setModel(new DefaultComboBoxModel<>(new String[] {"", "Cash", "Visa Card", "Master Card"}));
 		jcboPayment.setFont(new Font("Tahoma", Font.BOLD, 24));
 		jcboPayment.setBounds(188, 10, 230, 30);
 		panel_3_1_1.add(jcboPayment);
