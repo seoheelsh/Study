@@ -41,4 +41,14 @@ public class QueryMethodTest {
 			System.out.println("----> " + board.toString());
 		}
 	}
+	
+	@Test
+	public void testByContentContaining() {
+		List<Board> boardList = boardRepo.findByContentContaining("17");
+		
+		System.out.println("검색 결과");
+		for (Board board : boardList) {
+			System.out.println("----> " + board.toString());
+		}
+	}
 }
