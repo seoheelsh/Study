@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.rubypaper.board.domain.Board;
@@ -21,12 +22,14 @@ public class BoardRepositoryTest {
 	@Autowired
 	private BoardRepository boardRepo;
 	
-	/*
+	@Autowired
+	private PasswordEncoder encoder;
+	
 	@Test
 	public void testInsert() {
 		Member member1 = new Member();
 		member1.setId("member");
-		member1.setPassword("member123");
+		member1.setPassword(encoder.encode("member123"));
 		member1.setName("둘리");
 		member1.setRole(Role.ROLE_MEMBER);
 		member1.setEnabled(true);
@@ -34,13 +37,13 @@ public class BoardRepositoryTest {
 		
 		Member member2 = new Member();
 		member2.setId("admin");
-		member2.setPassword("admin123");
+		member2.setPassword(encoder.encode("admin123"));
 		member2.setName("도우너");
 		member2.setRole(Role.ROLE_ADMIN);
 		member1.setEnabled(true);
 		memberRepo.save(member2);
 		
-		for (int i = 1; i <= 13; i++) {
+		for (int i = 1; i <= 14; i++) {
 			Board board = new Board();
 			board.setMember(member1);
 			board.setTitle(member1.getName() + "가 등록한 게시글 " + i);
@@ -48,7 +51,7 @@ public class BoardRepositoryTest {
 			boardRepo.save(board);
 		}
 		
-		for (int i = 1; i <= 3; i++) {
+		for (int i = 1; i <= 4; i++) {
 			Board board = new Board();
 			board.setMember(member2);
 			board.setTitle(member2.getName() + "가 등록한 게시글 " + i);
@@ -56,7 +59,6 @@ public class BoardRepositoryTest {
 			boardRepo.save(board);
 		}
 	}
-	*/
 	
 	/*
 	@Test
@@ -72,6 +74,7 @@ public class BoardRepositoryTest {
 	}
 	*/
 	
+	/*
 	@Test
 	public void testGetBoardList() {
 		Member member = memberRepo.findById("member").get();
@@ -81,4 +84,5 @@ public class BoardRepositoryTest {
 			System.out.println("----> " + board.toString());
 		}
 	}
+	*/
 }
